@@ -1,0 +1,240 @@
+{% extends 'base_temp.html' %}
+{% load static %}
+{% block title %}
+    <title>Properties</title>
+{% endblock title %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="container text-center">
+            <form id="my-form">
+                {% csrf_token %}
+                <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <select class="form-select" aria-label="Default select example" name="p_type">
+                                    <option selected disabled value="any">Property Type</option>
+                                    <option value="any">Any</option>
+                                    <option value="Apartment">Apartment</option>
+                                    <option value="Furnished Apartment">Furnished Apartment</option>
+                                    <option value="Shared Apartment">Shared Apartment</option>
+                                    <option value="Single-family house">Single Family House</option>
+                                    <option value="Multi-family house">Multi Family House</option>
+                                    <option value="Holiday Home">Holiday Home</option>
+                                    <option value="Land">Land</option>
+                                    <option value="Parking Space,Garage">Parking Space,Garage</option>
+                                    <option value="Commerical Property">Commerical Property</option>
+                                    <option value="Hobby Room">Hobby Room</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="exampleInputTownPostCode"
+                                       placeholder="Enter Town Or PostCode"
+                                       name="town_postcode">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="exampleInputPriceMax"
+                                       placeholder="Enter Maximum Price"
+                                       name="price">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="exampleInputRoomMin"
+                                       placeholder="Enter Minimum Rooms"
+                                       name="room">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="exampleInputPDuration"
+                                       placeholder="Enter Publication Duration"
+                                       name="duration">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <select class="form-select" aria-label="Default select example" name="status">
+                                    <option disabled selected>Status</option>
+                                    <option value="any">Any (Default)</option>
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="exampleInputDate"
+                                       name="date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <button type="submit" class="form-control btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div disabled id='demo' style="display: none; border: white"
+                                         class="form-control"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <div class="container" id='results'>
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul id="pagination" class="pagination justify-content-end">
+            </ul>
+        </nav>
+    </div>
+{% endblock body %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            var currentPage = 1;
+            $('#my-form').submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'properties_views' %}',
+                    data: $(this).serialize() + '&page=' + currentPage,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    success: function (response) {
+                        document.getElementById("demo").innerHTML = 'Properties Found';
+                        document.getElementById("demo").style.display = 'block'
+                        $('#demo').delay(2000).fadeOut('slow');
+                        if (response.success) {
+                            var data = response.data;
+                            var html = '';
+                            for (var i = 0; i < data.length; i++) {
+                                var img_str = data[i].imageurls
+                                var img = img_str.toString().split('||', 1)
+                                var prop_id = data[i].prop_id
+                                var sensorID = "href='{% url 'detail_view' 12345 %}'";
+                                var url_mask = sensorID.replace("12345", prop_id);
+                                html += '<div class="row justify-content-center mb-3">' +
+                                    '<div class="col-md-12 col-xl-10">' +
+                                    '<div class="card shadow-0 border rounded-3">' +
+                                    '<div class="card-body">' +
+                                    '<div class="row">' +
+                                    '<div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">' +
+                                    '<div class="bg-image hover-zoom ripple rounded ripple-surface">' +
+                                    '<img src="' + img + '" class="w-100"/>' +
+                                    '<a href="#">' +
+                                    '<div class="hover-overlay">' +
+                                    '<div class="mask"' +
+                                    'style="background-color: rgba(253, 253, 253, 0.15);"></div>' +
+                                    '</div>' +
+                                    '</a>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class="col-md-6 col-lg-6 col-xl-6">' +
+                                    '<h5>' + data[i].title + '</h5>' +
+                                    '<div class="d-flex flex-row">' +
+                                    '<span>Property Type </span>' +
+                                    '<span class="text-primary"> : </span>' +
+                                    '<span>' + data[i].propertytypetext + '<br/></span>' +
+                                    '</div>' +
+                                    '<div class="mb-2 text-muted small">' +
+                                    '<span>Room</span>' +
+                                    '<span class="text-primary"> : </span>' +
+                                    '<span>' + data[i].room + '<br/></span>' +
+                                    '</div>' +
+                                    '<div class="mb-2 text-muted small">' +
+                                    '<span>Floor</span>' +
+                                    '<span class="text-primary"> : </span>' +
+                                    '<span>' + data[i].floor + '<br/></span>' +
+                                    '</div>' +
+                                    '<div class="mb-2 text-muted small">' +
+                                    '<span>Address</span>' +
+                                    '<span class="text-primary"> : </span>' +
+                                    '<span>' + data[i].address + '<br/></span>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">' +
+                                    '<div class="d-flex flex-row align-items-center mb-1">' +
+
+                                    '<h4 class="mb-1 me-1"> CHF ' + parseFloat(data[i].price) + '</h4>' +
+                                    '</div>' +
+                                    '<h6 class="text-danger-emphasis"><span class="text-black">Status : </span>' + data[i].onlinestatus + '</h6>' +
+                                    '<div class="d-flex flex-column mt-4">' +
+                                    '<a ' + url_mask + 'class="btn btn-primary btn-sm" type="button">Detail</a>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>'
+                            }
+                            $('#results').html(html);
+
+                            var paginationHtml = '';
+
+                            if (response.page_obj.has_previous) {
+                                paginationHtml += '<li class="page-item"><a class="page-link" href="#" data-page="' + response.page_obj.previous_page_number + '">Previous</a></li>';
+                            } else {
+                                paginationHtml += '<li class="page-item disabled"><span class="page-link">Previous</span></li>';
+                            }
+
+                            for (var i = 1; i <= response.page_obj.num_pages; i++) {
+                                if (i === response.page_obj.number) {
+                                    paginationHtml += '<li class="page-item active"><span class="page-link"> ' + i + '</span></li>';
+                                } else {
+                                    paginationHtml += '<li class="page-item"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
+                                }
+                            }
+
+                            if (response.page_obj.has_next) {
+                                paginationHtml += '<li class="page-item"><a class="page-link" href="#" data-page="' + response.page_obj.next_page_number + '">Next</a></li>';
+                            } else {
+                                paginationHtml += '<li class="page-item disabled"><span class="page-link">Next</span></li>';
+                            }
+
+                            $('#pagination').html(paginationHtml);
+
+
+                        }
+                    }
+                });
+            });
+            $(document).on('click', '#pagination a[data-page]', function (event) {
+                event.preventDefault();
+                currentPage = $(this).data('page');
+                $('#my-form').submit();
+                window.scrollTo(0, 0);
+            });
+
+        });
+    </script>
+{% endblock js %}

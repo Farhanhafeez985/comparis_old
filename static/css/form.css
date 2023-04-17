@@ -1,0 +1,171 @@
+.div-center {
+    width: 500px;
+    height: auto;
+    background-color: #146C94;
+    color: white;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    padding: 1em 2em;
+    border-bottom: 2px solid #146C94;
+    display: table;
+}
+
+div.content {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.login_btn {
+    margin-top: 10px;
+    background-color: #0a425b;
+    border-color: #0a425b;
+}
+
+.signup_btn {
+    color: white;
+}
+
+.reset_btn {
+    color: white;
+}
+
+/*.navbar {*/
+/*    background-color: #146C94;*/
+/*}*/
+
+/*.navbar-brand {*/
+/*    color: white;*/
+/*}*/
+
+.nav-link {
+    color: white;
+}
+
+
+/* Color of the links BEFORE scroll */
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #fff;
+}
+
+/*Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scrolled .navbar-brand {
+    color: #fff;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scroll,
+.navbar-scrolled {
+    background-color: #146C94;
+}
+
+.mask-custom {
+    backdrop-filter: blur(10px);
+    background-color: #146C94;
+}
+
+.navbar-brand {
+    font-size: 1.75rem;
+    letter-spacing: 3px;
+}
+
+.welcome {
+    text-align: center;
+}
+
+.welcome-div {
+    width: 1000px;
+    height: auto;
+    background-color: #146C94;
+    color: white;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    padding: 1em 2em;
+    border-bottom: 2px solid #146C94;
+    display: table;
+}
+
+@media (max-width: 767.98px) {
+    .border-sm-start-none {
+        border-left: none !important;
+    }
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+body {
+    background: #fff;
+    font-family: 'Roboto Condensed', sans-serif
+}
+
+.carousel-item {
+    width: 100%
+}
+
+.price span {
+    font-size: 18px
+}
+
+.cut {
+    text-decoration: line-through;
+    color: red
+}
+
+.icons i {
+    font-size: 17px;
+    color: #146C94;
+    margin-right: 2px
+}
+
+.offers i {
+    color: #146C94
+}
+
+.delivery i {
+    color: blue
+}
+
+label.radio {
+    cursor: pointer
+}
+
+label.radio input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    pointer-events: none
+}
+
+label.radio span {
+    padding: 2px 11px;
+    margin-right: 3px;
+    border: 1px solid #8f37aa;
+    display: inline-block;
+    color: #8f37aa;
+    border-radius: 3px;
+    text-transform: uppercase
+}
+
+label.radio input:checked + span {
+    border-color: #8f37aa;
+    background-color: #8f37aa;
+    color: #fff
+}
